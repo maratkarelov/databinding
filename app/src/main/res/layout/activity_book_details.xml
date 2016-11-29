@@ -1,0 +1,140 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="totalCount"
+            type="int"></variable>
+
+        <variable
+            name="bookDetails"
+            type="karelov.databinding.app.model.BookDetails" />
+
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/spacing_normal"
+        android:paddingLeft="@dimen/spacing_large"
+        android:paddingRight="@dimen/spacing_large"
+        android:paddingTop="@dimen/spacing_normal">
+
+        <RelativeLayout
+            android:id="@+id/l_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/book_thumbnail_imageview"
+                android:layout_width="120dp"
+                android:layout_height="160dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:layout_marginRight="@dimen/spacing_large"
+                app:imageUrl="@{bookDetails.volumeInfo.imageLinks.thumbnail}" />
+
+            <TextView
+                android:id="@+id/book_title_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/book_thumbnail_imageview"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{bookDetails.volumeInfo.title}"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"
+                tools:text="Book Title" />
+
+            <TextView
+                android:id="@+id/book_authors_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/book_title_textview"
+                android:layout_gravity="center_vertical"
+                android:layout_toRightOf="@+id/book_thumbnail_imageview"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{bookDetails.volumeInfo.authors[0]}"
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="italic"
+                tools:text="Author name" />
+
+            <TextView
+                android:id="@+id/book_publisher_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/book_authors_textview"
+                android:layout_gravity="center_vertical"
+                android:layout_toRightOf="@+id/book_thumbnail_imageview"
+                android:paddingBottom="@dimen/spacing_normal"
+                android:text="@{bookDetails.volumeInfo.publisher}"
+                android:textSize="@dimen/text_size_small"
+                tools:text="Publisher name" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_book_comments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/book_publisher_textview"
+                android:layout_gravity="center_vertical"
+                android:layout_toRightOf="@+id/book_thumbnail_imageview"
+                android:paddingBottom="@dimen/spacing_normal"
+                app:items="@{bookDetails.commentList}"
+                />
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_below="@+id/l_header"
+            android:id="@+id/l_footer"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:padding="@dimen/spacing_normal">
+
+            <LinearLayout
+                android:id="@+id/l_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/et_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:addTextChangedListener="@{bookDetails.getOnCommentChanged}"
+                    android:hint="comment"
+                    android:textColorHint="@color/hint_color" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/show_previous_book_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/l_comment"
+                android:layout_alignParentLeft="true"
+                android:onClick="onShowPreviousBook"
+                android:text="@string/show_prev"
+                app:visibilityOnIndex="@{bookDetails.index == 0?View.GONE:View.VISIBLE}" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/l_comment"
+                android:layout_alignParentRight="true"
+                android:onClick="onShowNextBook"
+                android:text="@string/show_next"
+                app:visibilityOnIndex="@{bookDetails.index == totalCount-1?View.GONE:View.VISIBLE}" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</layout>
